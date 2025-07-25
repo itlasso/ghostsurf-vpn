@@ -4,7 +4,9 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import VPNDashboard from './VPNDashboard';
 import ServerList from './ServerList';
 import StatsPanel from './StatsPanel';
+import SecurityDashboard from './SecurityDashboard';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Menu, X, Settings } from 'lucide-react';
 
 const AppLayout: React.FC = () => {
@@ -27,7 +29,6 @@ const AppLayout: React.FC = () => {
         const seconds = (diff % 60).toString().padStart(2, '0');
         setConnectionTime(`${hours}:${minutes}:${seconds}`);
         
-        // Simulate data usage
         const downloadMB = Math.floor(diff / 10) + Math.floor(Math.random() * 50);
         const uploadMB = Math.floor(diff / 20) + Math.floor(Math.random() * 20);
         setDataUsed({
@@ -53,62 +54,50 @@ const AppLayout: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="border-b bg-card border-border">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-3">
             {isMobile && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={toggleSidebar}
-                className="text-foreground hover:bg-muted"
-              >
+              <Button variant="ghost" size="sm" onClick={toggleSidebar}>
                 {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </Button>
             )}
-            <h1 className="text-xl font-bold text-foreground">GhostSurf VPN</h1>
+            <h1 className="text-xl font-bold">GhostSurf VPN</h1>
           </div>
-          <Button variant="ghost" size="sm" className="text-foreground hover:bg-muted">
+          <Button variant="ghost" size="sm">
             <Settings className="h-5 w-5" />
           </Button>
         </div>
       </header>
 
       <div className="flex">
-        {/* Sidebar */}
         {(!isMobile || sidebarOpen) && (
-          <aside className={`${isMobile ? 'fixed inset-y-0 left-0 z-50 w-80 bg-background border-r border-border' : 'w-80 border-r border-border'} p-4 space-y-4`}>
-            <ServerList
-              selectedServer={selectedServer}
-              onServerSelect={setSelectedServer}
-            />
-            <StatsPanel
-              isConnected={isConnected}
-              connectionTime={connectionTime}
-              dataUsed={dataUsed}
-            />
+          <aside className={`${isMobile ? 'fixed inset-y-0 left-0 z-50 w-80 bg-background border-r' : 'w-80 border-r'} p-4 space-y-4`}>
+            <ServerList selectedServer={selectedServer} onServerSelect={setSelectedServer} />
+            <StatsPanel isConnected={isConnected} connectionTime={connectionTime} dataUsed={dataUsed} />
           </aside>
         )}
 
-        {/* Main Content */}
         <main className="flex-1 p-6">
-          <div className="max-w-2xl mx-auto">
-            <VPNDashboard
-              onConnect={handleConnect}
-              onDisconnect={handleDisconnect}
-              isConnected={isConnected}
-            />
+          <div className="max-w-4xl mx-auto">
+            <Tabs defaultValue="dashboard" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+                <TabsTrigger value="security">Security</TabsTrigger>
+              </TabsList>
+              <TabsContent value="dashboard" className="mt-6">
+                <VPNDashboard onConnect={handleConnect} onDisconnect={handleDisconnect} isConnected={isConnected} />
+              </TabsContent>
+              <TabsContent value="security" className="mt-6">
+                <SecurityDashboard isConnected={isConnected} selectedServer={selectedServer} />
+              </TabsContent>
+            </Tabs>
           </div>
         </main>
       </div>
 
-      {/* Mobile overlay */}
       {isMobile && sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40"
-          onClick={toggleSidebar}
-        />
+        <div className="fixed inset-0 bg-black/50 z-40" onClick={toggleSidebar} />
       )}
     </div>
   );

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # GhostSurf Mobile VPN
 
 A modern, responsive VPN dashboard application built with React, TypeScript, and Tailwind CSS. Features a sleek mobile-first design with server selection, connection statistics, and real-time status monitoring.
@@ -8,6 +7,7 @@ A modern, responsive VPN dashboard application built with React, TypeScript, and
 - **Modern UI/UX**: Clean, mobile-first design with dark/light theme support
 - **Server Selection**: Choose from multiple global server locations
 - **Real-time Stats**: Monitor connection speed, latency, and data usage
+- **Security Features**: Encryption, IP masking, and tunneling protection
 - **Responsive Design**: Optimized for mobile, tablet, and desktop
 - **Animated Interactions**: Smooth transitions and connection animations
 - **TypeScript**: Full type safety and enhanced developer experience
@@ -17,35 +17,95 @@ A modern, responsive VPN dashboard application built with React, TypeScript, and
 Before you begin, ensure you have the following installed:
 - **Node.js** (v16.0.0 or higher)
 - **npm** (v7.0.0 or higher) or **yarn** (v1.22.0 or higher)
+- **WireGuard** (for VPN functionality)
 
 ## 🛠️ Installation
 
-1. **Clone the repository**
+### 1. Clone the repository
+```bash
+git clone <repository-url>
+cd ghostsurf-mobile-vpn
+```
+
+### 2. Install dependencies
+```bash
+npm install
+```
+or
+```bash
+yarn install
+```
+
+### 3. WireGuard Setup
+
+#### For Linux (Ubuntu/Debian):
+```bash
+sudo apt update
+sudo apt install wireguard
+```
+
+#### For macOS:
+```bash
+brew install wireguard-tools
+```
+
+#### For Windows:
+1. Download WireGuard from https://www.wireguard.com/install/
+2. Install the MSI package
+3. Add WireGuard to your system PATH
+
+#### Configuration:
+1. Generate key pair:
    ```bash
-   git clone <repository-url>
-   cd ghostsurf-mobile-vpn
+   wg genkey | tee privatekey | wg pubkey > publickey
    ```
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-   or
-   ```bash
-   yarn install
-   ```
-
-3. **Start the development server**
-   ```bash
-   npm run dev
-   ```
-   or
-   ```bash
-   yarn dev
+2. Create configuration file `/etc/wireguard/wg0.conf`:
+   ```ini
+   [Interface]
+   PrivateKey = <your-private-key>
+   Address = 10.0.0.2/24
+   DNS = 1.1.1.1
+   
+   [Peer]
+   PublicKey = <server-public-key>
+   Endpoint = <server-ip>:51820
+   AllowedIPs = 0.0.0.0/0
    ```
 
-4. **Open your browser**
-   Navigate to `http://localhost:5173` to view the application
+3. Start WireGuard:
+   ```bash
+   sudo wg-quick up wg0
+   ```
+
+### 4. Start the development server
+```bash
+npm run dev
+```
+or
+```bash
+yarn dev
+```
+
+### 5. Open your browser
+Navigate to `http://localhost:5173` to view the application
+
+## 🔒 Security Features
+
+### Encryption
+- **AES-256 Encryption**: Military-grade encryption for all traffic
+- **ChaCha20-Poly1305**: Modern authenticated encryption
+- **Perfect Forward Secrecy**: New keys for each session
+
+### IP Masking
+- **Real IP Protection**: Hide your actual IP address
+- **Geographic Spoofing**: Appear from different locations
+- **DNS Leak Protection**: Prevent DNS queries from revealing identity
+
+### Tunneling
+- **WireGuard Protocol**: Modern, fast, and secure tunneling
+- **Split Tunneling**: Route specific apps through VPN
+- **Kill Switch**: Block internet if VPN disconnects
 
 ## 🏗️ Build for Production
 
@@ -76,6 +136,7 @@ Before you begin, ensure you have the following installed:
 - **Connect/Disconnect**: Use the main button to toggle VPN connection
 - **Server Selection**: Choose from available server locations in the sidebar
 - **Statistics**: Monitor real-time connection stats in the stats panel
+- **Security Dashboard**: View encryption, IP masking, and tunneling status
 - **Theme Toggle**: Switch between light and dark themes
 
 ### Mobile Experience
@@ -93,6 +154,7 @@ Before you begin, ensure you have the following installed:
 - **State Management**: React Context API
 - **Routing**: React Router DOM
 - **Theme**: next-themes for dark/light mode
+- **VPN Protocol**: WireGuard
 
 ## 📁 Project Structure
 
@@ -103,7 +165,11 @@ src/
 │   ├── AppLayout.tsx   # Main app layout
 │   ├── VPNDashboard.tsx # Main dashboard
 │   ├── ServerList.tsx  # Server selection
-│   └── StatsPanel.tsx  # Statistics display
+│   ├── StatsPanel.tsx  # Statistics display
+│   ├── SecurityDashboard.tsx # Security overview
+│   ├── EncryptionPanel.tsx   # Encryption status
+│   ├── IPMaskingPanel.tsx    # IP masking info
+│   └── TunnelingPanel.tsx    # Tunneling status
 ├── contexts/           # React contexts
 ├── hooks/              # Custom React hooks
 ├── lib/                # Utility functions
@@ -153,6 +219,3 @@ No additional environment variables required for basic functionality.
 ---
 
 **Note**: This is a UI demonstration app. For production VPN functionality, additional backend services and native mobile app development would be required.
-=======
-# ghostsurf-vpn
->>>>>>> cca1ac2ee419ef52e70f66daaca4fe366a189f3f
