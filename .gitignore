@@ -1,3 +1,11 @@
+# WireGuard keys (NEVER commit these)
+privatekey
+publickey
+server_private.key
+server_public.key
+*.key
+*.conf
+
 # Logs
 logs
 *.log
