@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # GhostSurf Mobile VPN
 
 A modern, responsive VPN dashboard application built with React, TypeScript, and Tailwind CSS. Features a sleek mobile-first design with server selection, connection statistics, and real-time status monitoring.
@@ -152,3 +153,6 @@ No additional environment variables required for basic functionality.
 ---
 
 **Note**: This is a UI demonstration app. For production VPN functionality, additional backend services and native mobile app development would be required.
+=======
+# ghostsurf-vpn
+>>>>>>> cca1ac2ee419ef52e70f66daaca4fe366a189f3f
